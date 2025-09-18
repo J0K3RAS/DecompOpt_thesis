@@ -4,16 +4,10 @@ top_k=3
 dup_num=30
 ref_list=(4 6 12 19 21 22 42 44 49 53 54 59 70 72 73 74 75 76 79 80 82 83 84 88 97 98)
 
-ln -s /mnt/bn/molecule/DecompDiff/outputs outputs
-ln -s /mnt/bn/molecule/DecompDiff/data data
-ln -s /mnt/bn/molecule/DecompDiff/logs_diffusion_full logs_diffusion_full
-ln -s /mnt/bn/molecule/DecompDiff/pregen_info pregen_info
-
-source "$CONDA_DIR"/etc/profile.d/conda.sh
-conda activate decompdiff 
-
-python -m pip install numpy==1.23.1
-python -m pip install meeko==0.3.0
+export PYTHONPATH=/home/root/DecompOpt
+#export AMD_SERIALIZE_KERNEL=1
+#export PYTORCH_ROCM_ARCH="gfx1030"
+#export HSA_OVERRIDE_GFX_VERSION=10.3.0
 
 # opt prior
 prior_mode="beta_prior"
@@ -39,7 +33,7 @@ do
     else
       # decompose can fail
       if test -f ${best_res_dir}/best_mol_arms.pt; then
-        ckpt_path="logs_diffusion_full/pretrained_cond_decompdiff/cond_decompdiff.pt"
+        ckpt_path="logs_diffusion_full/pretrained_cond_decompdiff/decompopt.pt"
       else
         ckpt_path="logs_diffusion_full/pretrained_cond_decompdiff/decompdiff.pt"
       fi
@@ -48,7 +42,7 @@ do
     
     batch_size=20
     while ((batch_size >= 1)); do
-      python scripts/sample_diffusion_decomp_compose.py \
+      .venv/bin/python scripts/sample_diffusion_decomp_compose.py \
         configs/sampling_10_ret.yml \
         --ckpt_path ${ckpt_path} \
         --outdir ${output_dir} \
@@ -56,7 +50,8 @@ do
         --reference_arm_path ${best_res_dir}/best_mol_arms.pt \
         --dup_id ${dup_id} \
         --batch_size ${batch_size} \
-        --prior_mode ${prior_mode} || { exit 817; } # beta_prior
+        --prior_mode ${prior_mode} \
+         --device cuda || { exit 817; } # beta_prior
       echo output_dir=${output_dir}
       if [ $? -eq 0 ]; then
           echo "Program executed successfully with batch_size: $batch_size"
@@ -73,7 +68,7 @@ do
 
     sample_dir=${output_dir}/sampling_10_ret-${prior_mode}-${padded_data_id}-${padded_dup_id}
     echo sample_dir=${sample_dir}
-    python scripts/evaluate_mol_in_place_compose.py \
+    .venv/bin/python scripts/evaluate_mol_in_place_compose.py \
       ${sample_dir} \
       --data_id $data_id \
       --best_res_dir $best_res_dir \
