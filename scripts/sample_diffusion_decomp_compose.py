@@ -541,7 +541,7 @@ def sample_diffusion_ligand_decomp(
 def attach_data_with_generated_arms(data, reference_arm_path):
     assert os.path.exists(reference_arm_path)
     print(f"Load arms from: {reference_arm_path}")
-    reference_arms = torch.load(reference_arm_path)
+    reference_arms = torch.load(reference_arm_path, weights_only=False)
     assert data.num_arms == len(reference_arms)
     all_sim_arms = []
     arms_weight = []
@@ -603,7 +603,7 @@ if __name__ == '__main__':
     # Load checkpoint
     assert config.model.checkpoint or args.ckpt_path
     ckpt_path = args.ckpt_path if args.ckpt_path is not None else config.model.checkpoint
-    ckpt = torch.load(ckpt_path, map_location=args.device)
+    ckpt = torch.load(ckpt_path, weights_only=False, map_location=args.device)
     if 'train_config' in config.model:
         logger.info(f"Load training config from: {config.model['train_config']}")
         ckpt['config'] = misc.load_config(config.model['train_config'])

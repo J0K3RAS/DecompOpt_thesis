@@ -345,7 +345,7 @@ def eval_single_datapoint(index, id, args, supocket_radius=10):
 
             # load best arm
             if os.path.exists(os.path.join(args.best_res_dir, 'best_mol_arms.pt')):
-                best_arms = torch.load(os.path.join(args.best_res_dir, 'best_mol_arms.pt'))
+                best_arms = torch.load(os.path.join(args.best_res_dir, 'best_mol_arms.pt'), weights_only=False)
             else:
                 best_arms = None
             selected_arms = defaultdict(list)
@@ -408,7 +408,7 @@ if __name__ == '__main__':
     if not args.verbose:
         RDLogger.DisableLog('rdApp.*')
     
-    test_index = torch.load(os.path.join(args.sample_dir, "result.pt"))
+    test_index = torch.load(os.path.join(args.sample_dir, "result.pt"), weights_only=False)
     testset_results = []
     testset_pair_dist, testset_bond_dist = [], []
     r, pd, bd = eval_single_datapoint(test_index, args.data_id, args)
