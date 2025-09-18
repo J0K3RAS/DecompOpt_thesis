@@ -72,14 +72,14 @@ class PrepProt(object):
         
     def addH(self, prot_pqr):  # call pdb2pqr
         self.prot_pqr = prot_pqr
-        subprocess.Popen(['/opt/conda/envs/decompdiff/bin/pdb2pqr30','--ff=AMBER',self.prot, self.prot_pqr],
+        subprocess.Popen(['/home/root/DecompOpt/.venv/bin/pdb2pqr30','--ff=AMBER',self.prot, self.prot_pqr],
                          stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL).communicate()
 
     def get_pdbqt(self, prot_pdbqt):
         if getattr(self, 'prot_pqr', None) is None:
             self.prot_pqr = prot_pdbqt[:-5] + 'pqr'
         prepare_receptor = os.path.join(AutoDockTools.__path__[0], 'Utilities24/prepare_receptor4.py')
-        subprocess.Popen(['python3', prepare_receptor, '-r', self.prot_pqr, '-o', prot_pdbqt],
+        subprocess.Popen(['/home/root/DecompOpt/.venv/bin/python3', prepare_receptor, '-r', self.prot_pqr, '-o', prot_pdbqt],
                          stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL).communicate()
 
 
