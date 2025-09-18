@@ -1,0 +1,37 @@
+[project]
+name = "DecompOpt"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Charalampos Bekiaris",email = "charalbek@gmail.com"}
+]
+requires-python = "==3.12.9"
+dependencies = [
+	"numpy>1.22.3,<2",
+	"autodocktools-py3",
+	"torch==2.7.1",
+	"torchvision==0.22.1",
+	"torchaudio==2.7.1",
+	#"torch-geometric",
+	"rdkit<2024",
+	"openbabel",
+	"tensorboard",
+	"pyyaml",
+	"easydict",
+	"lmdb",
+	"mdtraj",
+	"alphaspace2",
+	"meeko==0.3.0",
+	"scipy",
+	"pdb2pqr",
+	"vina==1.2.7",
+	"scikit-learn>=1.3.2",
+	#"torch-scatter>=2.1.2",
+	#"torch-sparse>=0.6.18",
+	"pandas>=2.3.2",
+	"matplotlib>=3.10.6",
+]
+
+[tool.uv.sources]
+autodocktools-py3 = { git = "https://github.com/Valdes-Tresanco-MS/AutoDockTools_py3" }
+
