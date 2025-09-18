@@ -61,7 +61,8 @@ def substitute_golden_prior_with_beta_prior(data, beta_prior_path, protein_ligan
     if len(beta_prior['scaffold_prior']) == 1:
         num, mu_i, cov_i, mu_a, cov_a = beta_prior['scaffold_prior'][0]
         data.scaffold_prior.append((num, torch.tensor(mu_i).float(), torch.tensor(cov_i).float(), None, None))
-    data.pocket_atom_masks = torch.tensor(data.pocket_atom_masks)
+    data.pocket_atom_masks = [torch.tensor(mask, dtype=torch.bool) for mask in data.pocket_atom_masks]
+    data.pocket_atom_masks = torch.stack(data.pocket_atom_masks)
 
 
 def substitute_golden_prior_with_given_prior(data, prior_dict, protein_ligand_dist_th=10.0):
@@ -82,7 +83,8 @@ def substitute_golden_prior_with_given_prior(data, prior_dict, protein_ligand_di
     if len(prior_dict['scaffold_prior']) == 1:
         num, mu_i, cov_i, mu_a, cov_a = prior_dict['scaffold_prior'][0]
         data.scaffold_prior.append((num, torch.tensor(mu_i).float(), torch.tensor(cov_i).float(), None, None))
-    data.pocket_atom_masks = torch.tensor(data.pocket_atom_masks)
+    data.pocket_atom_masks = [torch.tensor(mask, dtype=torch.bool) for mask in data.pocket_atom_masks]
+    data.pocket_atom_masks = torch.stack(data.pocket_atom_masks)
 
 
 def apply_std_coef(data, std_coef):
