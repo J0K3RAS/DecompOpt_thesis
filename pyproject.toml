@@ -38,3 +38,5 @@ autodocktools-py3 = { git = "https://github.com/Valdes-Tresanco-MS/AutoDockTools
 [tool.uv]
 no-build-isolation-package = ["torch-sparse", "torch-scatter"]
 
+[tool.uv.extra-build-dependencies]
+torch-scatter = ["setuptools"]
