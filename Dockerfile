@@ -16,4 +16,5 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
     && uv python install cpython-3.12.9-linux-x86_64-gnu \
     && uv sync \
     && uv pip install torch_sparse -f https://data.pyg.org/whl/torch-2.7.1+cpu.html \
-    && uv pip install torch_scatter -f https://data.pyg.org/whl/torch-2.7.1+cpu.html
+    && uv pip install torch_scatter -f https://data.pyg.org/whl/torch-2.7.1+cpu.html \
+    && uv pip install torch_cluster -f https://data.pyg.org/whl/torch-2.7.1+cpu.html
