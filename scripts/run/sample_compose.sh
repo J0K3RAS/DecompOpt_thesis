@@ -22,7 +22,7 @@ padded_data_id=`printf "%03d" ${data_id}`
 output_dir=${outdir}/sampling_${padded_data_id}
 best_res_dir=${output_dir}/best_record
 rm -rf $best_res_dir
-mkdir $best_res_dir
+mkdir -p $best_res_dir
 
 for ((dup_id=0; dup_id<=$dup_num; dup_id++))
 do
