@@ -32,11 +32,9 @@ dependencies = [
 	"matplotlib>=3.10.6",
 ]
 
+[tool.uv.extra-build-dependencies]
+torch-scatter = ["setuptools", "torch"]
+torch-sparse = ["setuptools", "torch"]
+
 [tool.uv.sources]
 autodocktools-py3 = { git = "https://github.com/Valdes-Tresanco-MS/AutoDockTools_py3" }
-
-[tool.uv]
-no-build-isolation-package = ["torch-sparse", "torch-scatter"]
-
-[tool.uv.extra-build-dependencies]
-torch-scatter = ["setuptools"]
