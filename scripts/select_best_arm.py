@@ -20,7 +20,7 @@ if __name__ == '__main__':
             continue
         
         try:
-            eval_res = torch.load(os.path.join(args.outdir, sample_path, 'eval_full/metrics.pt'))
+            eval_res = torch.load(os.path.join(args.outdir, sample_path, 'eval_full/metrics.pt'), weights_only=False)
         except:
             print('eval failed:', sample_path)
             continue
