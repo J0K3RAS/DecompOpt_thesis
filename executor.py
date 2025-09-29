@@ -5,6 +5,7 @@ from contextlib import closing
 from datetime import datetime
 from multiprocessing import Pool
 from functools import partial
+from tqdm.contrib.concurrent import process_map
 
 GPU2IDS = {
     0: [_ for _ in range(0, 12)],
@@ -27,7 +28,7 @@ def run_compose(ids, output):
 
 def run_eval(ids, output):
     for data_id in ids:
-        cmd = f"bash scripts/run/eval_vina_full.sh {data_id} {output} > eval_{data_id:03}.log"
+        cmd = f"bash scripts/run/eval_vina_full.sh {data_id} {output}"
         print(cmd)
         os.system(cmd)
     return
@@ -46,22 +47,31 @@ def compose_candidates(run, workers, output):
     return
 
 def eval_candidates(run, workers, output):
-    ids_list = np.array_split(
-        np.array(GPU2IDS[run]),
-        workers
-    )
+    if run == -1:
+        indices = sorted([int(s[10:]) for s in os.listdir(output) if s.startswith('sampling_')])
+    else:
+        indices = GPU2IDS[run]
+    # ids_list = np.array_split(
+    #     np.array(indices),
+    #     workers
+    # )
     f = partial(run_eval, output=output)
-    with closing(Pool(workers)) as pool:
-        pool.starmap(
-            f,
-            ([a.tolist(), ] for a in ids_list)
-        )
+    _ = process_map(
+        f,
+        [(i,) for i in indices],
+        max_workers=workers
+    )
+    # with closing(Pool(workers)) as pool:
+    #     pool.starmap(
+    #         f,
+    #         ([a.tolist(), ] for a in ids_list)
+    #     )
     return
 
 def best_mol_candidates(run, output):
     for data_id in GPU2IDS[run]:
         cmd = f".venv/bin/python scripts/select_best_arm.py {output}/sampling_{data_id:03} > best_arm_{data_id:03}.log"
-        print(cmd)
+        #print(cmd)
         #os.system(f"ls -larth {output}/sampling_{data_id:03}")
         os.system(cmd)
     return
