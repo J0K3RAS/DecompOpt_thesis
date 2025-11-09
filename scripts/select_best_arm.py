@@ -50,6 +50,9 @@ if __name__ == '__main__':
             elif args.metric == 'vina_min':
                 metircs.append(-1 * res['vina']['minimize'][0]['affinity'])
 
+            elif args.metric == 'vina_dock':
+                metircs.append(-1 * res['vina']['dock'][0]['affinity'])
+
             else:
                 raise NotImplementedError
 
